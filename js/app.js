@@ -11,3 +11,18 @@
 //you should also write the code to filter the set of markers when the user
 //types a search phrase into the search box
 
+$(document).ready(function() {
+    var mapElem = document.getElementById('map');
+    var center = {
+        lat: 47.6097,
+        lng: -122.3331
+    };
+
+    var map = new google.maps.Map(mapElem, {
+        center: center,
+        zoom: 12
+    });
+
+    var infoWindow = new google.maps.InfoWindow();
+
+});
