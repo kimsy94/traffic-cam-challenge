@@ -10,6 +10,8 @@
 //image
 //you should also write the code to filter the set of markers when the user
 //types a search phrase into the search box
+//var camera = cameras[index].cameralabel.toLowerCase();
+//var marker = markers[index];
 
 $(document).ready(function() {
     var mapElem = document.getElementById('map');
@@ -25,26 +27,28 @@ $(document).ready(function() {
 
     var infoWindow = new google.maps.InfoWindow();
 
-    var stations;
+    var cameras;
     var markers = [];
 
     $.getJSON('http://data.seattle.gov/resource/65fc-btcc.json')
         .done(function(data) {
-            stations = data;
+            cameras = data;
 
-            data.forEach(function(station, itemIndex) {
+            data.forEach(function(camera, itemIndex) {
                 var marker = new google.maps.Marker({
                     position: {
-                        lat: Number(station.location.latitude),
-                        lng: Number(station.location.longitude)
+                        lat: Number(camera.location.latitude),
+                        lng: Number(camera.location.longitude)
                     },
                     map: map
                 });
                 markers.push(marker);
 
                 google.maps.event.addListener(marker, 'click', function() {
-                    var html = '<h2>' + station.station_name + '</h2>';
-                    html += '<p>' + station.street_address + '</p>';
+                    map.panTo(marker.getPosition());
+
+                    var html = '<h2>' + camera.cameralabel + '</h2>';
+                    html += '<img src="' + camera.imageurl.url + '"alt="Traffic Camera">';
 
                     infoWindow.setContent(html);
                     infoWindow.open(map, this);
@@ -57,4 +61,16 @@ $(document).ready(function() {
         .always(function() {
             $('#ajax-loader').fadeOut();
         });
+
+    $("#filter").bind("search keyup", function() {
+        var filtering = $('#filter').str.toLowerCase();
+        for(var i = 0; i < cameras.length; i++) {
+            if(camera.indexOf(filtering) != -1) {
+                marker.setMap(map);
+            }
+            else {
+                marker.setMap(null);
+            }
+        }
+    });
 });
