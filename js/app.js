@@ -10,8 +10,6 @@
 //image
 //you should also write the code to filter the set of markers when the user
 //types a search phrase into the search box
-//var camera = cameras[index].cameralabel.toLowerCase();
-//var marker = markers[index];
 
 $(document).ready(function() {
     var mapElem = document.getElementById('map');
@@ -63,13 +61,13 @@ $(document).ready(function() {
         });
 
     $("#filter").bind("search keyup", function() {
-        var filtering = $('#filter').str.toLowerCase();
+        var filtering = $('#filter')[0].value.toLowerCase();
         for(var i = 0; i < cameras.length; i++) {
-            if(camera.indexOf(filtering) != -1) {
-                marker.setMap(map);
+            if(cameras[i].cameralabel.toLowerCase().indexOf(filtering) != -1) {
+                markers[i].setMap(map);
             }
             else {
-                marker.setMap(null);
+                markers[i].setMap(null);
             }
         }
     });
